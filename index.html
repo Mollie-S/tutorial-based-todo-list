@@ -6,29 +6,34 @@
     <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
-    <h1>ToDo List</h1>
-    <div >
-      <button type="button" onclick="handlers.toggleAll()" name="togglebtn">Toggle All</button>
-    </div>
-    <div>
-      <button type="button" onclick="handlers.addToDos()"name="button">Add a new ToDo</button>
-      <input type="text" id="newToDoInput">
-    </div>
-    <div>
-      <button type="button" onclick="handlers.changeToDos()" name="button">Change your ToDo</button>
-      <input type="number" id="changeToDosPosition">
-      <input type="text" id="changeToDosText">
-    </div>
-    <div>
-      <button type="button" onclick="handlers.toggleToDos()" name="button">Toggle completed</button>
-      <input type="number" id="toggleToDosPositionInput">
-    </div>
-    <!-- <button type="button" id="displayToDosButton" name="displaybtn">Display ToDos</button>
-    <button type="button" id="toggleAllButton" name="togglebtn">Toggle All</button> -->
+    <div class="todolist">
 
-    <ul>
+      <h1>ToDo List</h1>
+      <div >
+        <button type="button" onclick="handlers.toggleAll()" name="togglebtn">Toggle All</button>
+      </div>
+      <div>
+        <button type="button" onclick="handlers.addToDos()"name="button">Add a new ToDo</button>
+        <input type="text" id="newToDoInput">
+      </div>
+      <div>
+        <button type="button" onclick="handlers.changeToDos()" name="button">Change your ToDo</button>
+        <input type="number" id="changeToDosPosition">
+        <input type="text" id="changeToDosText">
+      </div>
+      <!-- <div>
+        <button type="button" onclick="handlers.toggleToDos()" name="button">Toggle completed</button>
+        <input type="number" id="toggleToDosPositionInput">
+      </div> -->
+      <!-- <button type="button" id="displayToDosButton" name="displaybtn">Display ToDos</button>
+      <button type="button" id="toggleAllButton" name="togglebtn">Toggle All</button> -->
+      <div class="list-with-text">
+        <h3></h3>
+        <ul>
 
-    </ul>
+        </ul>
+      </div>
+    </div>
     <script src="toDoListscripts.js"></script>
   </body>
 </html>

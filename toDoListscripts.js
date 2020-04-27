@@ -1,19 +1,19 @@
 let toDoList = {
   todos: [],
-  displayToDos: function() {
-    if(this.todos.length === 0) {
-      console.log('Your To Do list is empty');
-    } else {
-        console.log('My todos: ');
-        this.todos.forEach(function(todo) {
-          if(todo.completed === true) {
-            console.log('(x)', todo.todoText);
-          } else {
-              console.log('()', todo.todoText);
-            }
-        });
-      }
-  },
+  // displayToDos: function() {
+  //   if(this.todos.length === 0) {
+  //     console.log('Your To Do list is empty');
+  //   } else {
+  //       console.log('My todos: ');
+  //       this.todos.forEach(function(todo) {
+  //         if(todo.completed === true) {
+  //           console.log('(x)', todo.todoText);
+  //         } else {
+  //             console.log('()', todo.todoText);
+  //           }
+  //       });
+  //     }
+  // },
   addToDos: function(todoText) {
     todoText = todoText.trim();
     if (todoText.length === 0) return;
@@ -22,7 +22,7 @@ let toDoList = {
       todoText: todoText,
       completed: false,
     });
-    this.displayToDos();
+    viewToDos.displayToDos();
   },
   changeToDos: function(todoIndex, todoText) {
     // let a = NaN;
@@ -31,21 +31,16 @@ let toDoList = {
     if (todoText.length === 0) return;
 
     this.todos[todoIndex].todoText = todoText;
-    this.displayToDos();
+    viewToDos.displayToDos();
   },
   deleteToDos: function(todoIndex) {
     this.todos.splice(todoIndex,1);
-    this.displayToDos();
+    viewToDos.displayToDos();
   },
   toggleToDos: function(todoIndex) {
-    // let a = NaN; // Since NaN is the only JavaScript value that is treated as unequal to itself,
-    // // you can always test if a value is NaN by checking it for equality to itself:
-    //
-    // if (a !==a || todoIndex < 0 || todoIndex >= this.todos.length) return;
-
     let todo = this.todos[todoIndex];
     todo.completed = !todo.completed;
-    this.displayToDos();
+    viewToDos.displayToDos();
   },
   toggleAll: function() {
     let totalToDos = this.todos.length;
@@ -74,7 +69,7 @@ let toDoList = {
     //     this.todos[i].completed = true;
     //   }
     // }
-    toDoList.displayToDos();
+    viewToDos.displayToDos();
   }
 };
 
@@ -97,18 +92,16 @@ let handlers = {
     viewToDos.displayToDos();
 
   },
-  deleteToDos: function(todoIndex) {
-    toDoList.deleteToDos(todoIndex);
-    viewToDos.displayToDos();
-
-  },
-  toggleToDos: function() {
-    let toggleToDosPositionInput = document.getElementById("toggleToDosPositionInput");
-    toDoList.toggleToDos(toggleToDosPositionInput.valueAsNumber);
-    toggleToDosPositionInput.value = "";
-    viewToDos.displayToDos();
-
-  },
+  // deleteToDos: function(todoIndex) {
+  //   toDoList.deleteToDos(todoIndex);
+  //   viewToDos.displayToDos();
+  //
+  // },
+  // toggleToDos: function(todoIndex) {
+  //   toDoList.toggleToDos(todoIndex);
+  //   viewToDos.displayToDos();
+  //
+  // },
   toggleAll: function() {
     toDoList.toggleAll();
     viewToDos.displayToDos();
@@ -116,30 +109,48 @@ let handlers = {
 };
 
 let viewToDos = {
+  generation: 0,
   displayToDos: function() {
-    let toDosUl = document.querySelector("ul");
-    toDosUl.innerHTML = "";
-    toDoList.todos.forEach(function(todo, todoIndex) {
-      let toDoLi = document.createElement("li");
-      let toDoTextWithCompletion = "";
 
-      if(todo.completed === true) {
-        toDoTextWithCompletion = "(x)" + todo.todoText;
-      } else {
-          toDoTextWithCompletion = "( )" + todo.todoText;
-        }
-      toDoLi.id = todoIndex;
-      toDoLi.textContent = toDoTextWithCompletion;
-      toDoLi.appendChild(this.createDeleteToDoButton())
-      toDosUl.appendChild(toDoLi)
-    }, this);
+        let toDosUl = document.querySelector("ul");
+
+        toDosUl.innerHTML = "";
+        toDoList.todos.forEach(function(todo, todoIndex) {
+          let toDoLi = document.createElement("li");
+          let toDoTextWithCompletion = "";
+
+          if(todo.completed === true) {
+            toDoTextWithCompletion = "(x)" + todo.todoText;
+          } else {
+              toDoTextWithCompletion = "( )" + todo.todoText;
+            }
+          toDoLi.id = todoIndex;
+          toDoLi.textContent = toDoTextWithCompletion;
+          toDoLi.appendChild(this.createToggleToDoButton(todo.completed));
+          toDoLi.appendChild(this.createDeleteToDoButton());
+          toDosUl.appendChild(toDoLi);
+        }, this);
   },
   createDeleteToDoButton: function() {
     let deleteToDoButton = document.createElement("button");
-    deleteToDoButton.textContent = "Delete ToDo";
+    deleteToDoButton.textContent = "Delete To Do";
     deleteToDoButton.className = "deleteToDoButton";
     return deleteToDoButton;
   },
+  createToggleToDoButton: function(completed) {
+    let toggleToDoButton = document.createElement("button");
+    if (!completed) {
+      toggleToDoButton.textContent = "Mark as completed";
+    } else {
+      toggleToDoButton.textContent = "Untick as completed";
+      }
+    toggleToDoButton.className = "toggleToDoButton";
+    return toggleToDoButton;
+  },
+  // createChangeToDoButton: function() {
+  //   let changeToDoButton = document.createElement("button");
+  //   changeToDoButton.textContent = "Change"
+  // },
   setUpEventListeners: function () {
     let toDosUl = document.querySelector("ul");
 
@@ -147,7 +158,10 @@ let viewToDos = {
 
       let elementClicked = event.target;
       if (elementClicked.className === "deleteToDoButton") {
-        handlers.deleteToDos(parseInt(elementClicked.parentNode.id));
+        toDoList.deleteToDos(parseInt(elementClicked.parentNode.id));
+      }
+      if (elementClicked.className === "toggleToDoButton") {
+        toDoList.toggleToDos(parseInt(elementClicked.parentNode.id));
       }
     });
   }

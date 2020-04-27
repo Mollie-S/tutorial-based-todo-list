@@ -1,3 +1,9 @@
 body {
-  background-color: #FAF3DD;
+    background: linear-gradient(#faf3dd, #b3a98d);
+    background-attachment: fixed;
+}
+.todolist {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
